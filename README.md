@@ -6,7 +6,9 @@
 
 The objective of this project is to clean, analyze, and visualize supermarket sales data using Python.
 
-### Dataset
+---
+
+## Dataset
 
 The dataset contains **1,000 supermarket transactions** and **17 columns**.
 
@@ -20,7 +22,7 @@ The dataset includes information such as:
 - Product Line
 - Unit Price
 - Quantity
-- Tax
+- Tax 5%
 - Total Sales
 - Date
 - Time
@@ -34,23 +36,23 @@ The dataset includes information such as:
 
 ## Data Cleaning
 
-The following data-cleaning steps were performed:
+The following data-cleaning steps were performed using Pandas.
 
 ### 1. Missing Values
 
-Missing values were checked using Pandas.
+Missing values were checked before and after cleaning.
 
 **Result:** No missing values were found.
 
 ### 2. Duplicate Records
 
-Duplicate rows were checked and removed using Pandas.
+Duplicate rows were checked and removed.
 
 **Result:** No duplicate rows were found.
 
 ### 3. Date Conversion
 
-The `Date` column was converted into a proper datetime format for time-based analysis.
+The `Date` column was converted into a proper datetime format to enable time-based analysis.
 
 ### 4. Outlier Detection
 
@@ -58,7 +60,7 @@ The Interquartile Range (IQR) method was used to detect outliers in numerical co
 
 A total of **9 high-value transactions** were identified as outliers in the `Total` column.
 
-After investigation, these transactions were found to be legitimate sales with a quantity of 10. Therefore, they were **retained rather than removed**.
+After investigation, these transactions were found to be legitimate supermarket transactions with a quantity of 10. Therefore, the outliers were **retained rather than removed**.
 
 ---
 
@@ -82,7 +84,7 @@ The following analyses were performed:
 The project uses:
 
 - **Pandas** for data manipulation and analysis
-- **Matplotlib** for charts
+- **Matplotlib** for data visualization
 - **Seaborn** for statistical visualization
 
 The following visualizations were created:
@@ -96,7 +98,7 @@ The following visualizations were created:
 7. Payment Method Usage
 8. Average Transaction Value by Product Line
 
-All visualizations are automatically saved in the `figures` folder.
+All visualizations are saved in the `figures` folder.
 
 ---
 
@@ -151,7 +153,7 @@ The average transaction value across the dataset was approximately **322.97**.
 ## Project Structure
 
 ```text
-TASK 1/
+thiranex-task-1-data-cleaning/
 │
 ├── task1.py
 ├── supermarket_sales - Sheet1.csv
@@ -167,3 +169,4 @@ TASK 1/
     ├── 06_sales_distribution_boxplot.png
     ├── 07_payment_method_usage.png
     └── 08_average_transaction_value.png
+
