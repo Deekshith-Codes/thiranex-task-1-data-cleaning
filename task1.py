@@ -1,27 +1,13 @@
-# ============================================================
-# THIRANEX INTERNSHIP - TASK 1
-# Data Cleaning & Visualization Project
-# ============================================================
-
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from pathlib import Path
 
 
 # ============================================================
-# 1. SETUP
+# THIRANEX INTERNSHIP - TASK 1
+# Data Cleaning & Visualization
 # ============================================================
-
-INPUT_FILE = "supermarket_sales - Sheet1.csv"
-OUTPUT_FILE = "cleaned_supermarket_sales.csv"
-FIGURE_FOLDER = Path("figures")
-
-# Create folder for visualizations
-FIGURE_FOLDER.mkdir(exist_ok=True)
-
-# Seaborn style
-sns.set_theme(style="whitegrid")
 
 print("=" * 60)
 print("THIRANEX INTERNSHIP - TASK 1")
@@ -29,17 +15,29 @@ print("Data Cleaning & Visualization")
 print("=" * 60)
 
 
-# ============================================================
+# ------------------------------------------------------------
+# 1. SETUP
+# ------------------------------------------------------------
+
+INPUT_FILE = "supermarket_sales - Sheet1.csv"
+OUTPUT_FILE = "cleaned_supermarket_sales.csv"
+FIGURE_DIR = "figures"
+
+# Create figures folder if it doesn't exist
+os.makedirs(FIGURE_DIR, exist_ok=True)
+
+sns.set_theme(style="whitegrid")
+
+
+# ------------------------------------------------------------
 # 2. LOAD DATASET
-# ============================================================
+# ------------------------------------------------------------
 
 df = pd.read_csv(INPUT_FILE)
 
-# Convert Date column to datetime
-df["Date"] = pd.to_datetime(df["Date"])
-
 print("\n--- DATASET INFORMATION ---")
 print("Rows and columns:", df.shape)
+
 print("\nColumn names:")
 print(df.columns.tolist())
 
@@ -47,15 +45,21 @@ print("\nFirst 5 rows:")
 print(df.head())
 
 
-# ============================================================
-# 3. DATA CLEANING
-# ============================================================
+# ------------------------------------------------------------
+# 3. DATE CONVERSION
+# ------------------------------------------------------------
+
+df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
+
+
+# ------------------------------------------------------------
+# 4. MISSING VALUE CHECK
+# ------------------------------------------------------------
 
 print("\n--- MISSING VALUES ---")
 
-missing_before = df.isnull().sum()
 print("Missing values before cleaning:")
-print(missing_before)
+print(df.isnull().sum())
 
 # Remove rows containing missing values
 df = df.dropna()
@@ -64,29 +68,34 @@ print("\nMissing values after cleaning:")
 print(df.isnull().sum())
 
 
-# Check duplicates
+# ------------------------------------------------------------
+# 5. DUPLICATE CHECK
+# ------------------------------------------------------------
+
 print("\n--- DUPLICATE CHECK ---")
 
 duplicates_before = df.duplicated().sum()
+
 print("Duplicate rows before cleaning:", duplicates_before)
 
 df = df.drop_duplicates()
 
 duplicates_after = df.duplicated().sum()
+
 print("Duplicate rows after cleaning:", duplicates_after)
 
 
-# ============================================================
-# 4. DESCRIPTIVE STATISTICS
-# ============================================================
+# ------------------------------------------------------------
+# 6. DESCRIPTIVE STATISTICS
+# ------------------------------------------------------------
 
 print("\n--- DESCRIPTIVE STATISTICS ---")
 print(df.describe())
 
 
-# ============================================================
-# 5. SALES ANALYSIS
-# ============================================================
+# ------------------------------------------------------------
+# 7. SALES ANALYSIS
+# ------------------------------------------------------------
 
 print("\n--- SALES BY PRODUCT LINE ---")
 
@@ -139,9 +148,10 @@ payment_counts = df["Payment"].value_counts()
 print(payment_counts)
 
 
-# ============================================================
-# 6. VISUALIZATION 1 - SALES BY PRODUCT LINE
-# ============================================================
+# ------------------------------------------------------------
+# 8. VISUALIZATION 1
+# Total Sales by Product Line
+# ------------------------------------------------------------
 
 plt.figure(figsize=(10, 6))
 
@@ -152,14 +162,20 @@ plt.xlabel("Total Sales")
 plt.ylabel("Product Line")
 plt.tight_layout()
 
-plt.savefig(FIGURE_FOLDER / "01_sales_by_product_line.png", dpi=300)
+plt.savefig(
+    os.path.join(FIGURE_DIR, "01_sales_by_product_line.png"),
+    dpi=300,
+    bbox_inches="tight"
+)
+
 plt.show()
 plt.close()
 
 
-# ============================================================
-# 7. VISUALIZATION 2 - SALES BY BRANCH
-# ============================================================
+# ------------------------------------------------------------
+# 9. VISUALIZATION 2
+# Total Sales by Branch
+# ------------------------------------------------------------
 
 plt.figure(figsize=(8, 5))
 
@@ -170,14 +186,20 @@ plt.xlabel("Branch")
 plt.ylabel("Total Sales")
 plt.tight_layout()
 
-plt.savefig(FIGURE_FOLDER / "02_sales_by_branch.png", dpi=300)
+plt.savefig(
+    os.path.join(FIGURE_DIR, "02_sales_by_branch.png"),
+    dpi=300,
+    bbox_inches="tight"
+)
+
 plt.show()
 plt.close()
 
 
-# ============================================================
-# 8. VISUALIZATION 3 - SALES BY CUSTOMER TYPE
-# ============================================================
+# ------------------------------------------------------------
+# 10. VISUALIZATION 3
+# Total Sales by Customer Type
+# ------------------------------------------------------------
 
 plt.figure(figsize=(8, 5))
 
@@ -188,14 +210,20 @@ plt.xlabel("Customer Type")
 plt.ylabel("Total Sales")
 plt.tight_layout()
 
-plt.savefig(FIGURE_FOLDER / "03_sales_by_customer_type.png", dpi=300)
+plt.savefig(
+    os.path.join(FIGURE_DIR, "03_sales_by_customer_type.png"),
+    dpi=300,
+    bbox_inches="tight"
+)
+
 plt.show()
 plt.close()
 
 
-# ============================================================
-# 9. VISUALIZATION 4 - SALES BY GENDER
-# ============================================================
+# ------------------------------------------------------------
+# 11. VISUALIZATION 4
+# Total Sales by Gender
+# ------------------------------------------------------------
 
 plt.figure(figsize=(8, 5))
 
@@ -206,18 +234,24 @@ plt.xlabel("Gender")
 plt.ylabel("Total Sales")
 plt.tight_layout()
 
-plt.savefig(FIGURE_FOLDER / "04_sales_by_gender.png", dpi=300)
+plt.savefig(
+    os.path.join(FIGURE_DIR, "04_sales_by_gender.png"),
+    dpi=300,
+    bbox_inches="tight"
+)
+
 plt.show()
 plt.close()
 
 
-# ============================================================
-# 10. VISUALIZATION 5 - DAILY SALES TREND
-# ============================================================
+# ------------------------------------------------------------
+# 12. VISUALIZATION 5
+# Daily Sales Trend
+# ------------------------------------------------------------
 
 daily_sales = df.groupby("Date")["Total"].sum()
 
-plt.figure(figsize=(12, 5))
+plt.figure(figsize=(12, 6))
 
 daily_sales.plot()
 
@@ -226,14 +260,20 @@ plt.xlabel("Date")
 plt.ylabel("Total Sales")
 plt.tight_layout()
 
-plt.savefig(FIGURE_FOLDER / "05_daily_sales_trend.png", dpi=300)
+plt.savefig(
+    os.path.join(FIGURE_DIR, "05_daily_sales_trend.png"),
+    dpi=300,
+    bbox_inches="tight"
+)
+
 plt.show()
 plt.close()
 
 
-# ============================================================
-# 11. VISUALIZATION 6 - SEABORN BOX PLOT
-# ============================================================
+# ------------------------------------------------------------
+# 13. VISUALIZATION 6
+# Sales Distribution by Product Line
+# ------------------------------------------------------------
 
 plt.figure(figsize=(10, 6))
 
@@ -249,14 +289,20 @@ plt.ylabel("Total Sales")
 plt.xticks(rotation=45)
 plt.tight_layout()
 
-plt.savefig(FIGURE_FOLDER / "06_sales_distribution_boxplot.png", dpi=300)
+plt.savefig(
+    os.path.join(FIGURE_DIR, "06_sales_distribution_boxplot.png"),
+    dpi=300,
+    bbox_inches="tight"
+)
+
 plt.show()
 plt.close()
 
 
-# ============================================================
-# 12. VISUALIZATION 7 - PAYMENT METHOD
-# ============================================================
+# ------------------------------------------------------------
+# 14. VISUALIZATION 7
+# Payment Method Usage
+# ------------------------------------------------------------
 
 plt.figure(figsize=(8, 5))
 
@@ -267,14 +313,20 @@ plt.xlabel("Payment Method")
 plt.ylabel("Number of Transactions")
 plt.tight_layout()
 
-plt.savefig(FIGURE_FOLDER / "07_payment_method_usage.png", dpi=300)
+plt.savefig(
+    os.path.join(FIGURE_DIR, "07_payment_method_usage.png"),
+    dpi=300,
+    bbox_inches="tight"
+)
+
 plt.show()
 plt.close()
 
 
-# ============================================================
-# 13. VISUALIZATION 8 - AVERAGE TRANSACTION VALUE
-# ============================================================
+# ------------------------------------------------------------
+# 15. VISUALIZATION 8
+# Average Transaction Value by Product Line
+# ------------------------------------------------------------
 
 avg_sales_product = (
     df.groupby("Product line")["Total"]
@@ -287,18 +339,23 @@ plt.figure(figsize=(10, 6))
 avg_sales_product.plot(kind="barh")
 
 plt.title("Average Transaction Value by Product Line")
-plt.xlabel("Average Transaction Value")
+plt.xlabel("Average Total")
 plt.ylabel("Product Line")
 plt.tight_layout()
 
-plt.savefig(FIGURE_FOLDER / "08_average_transaction_value.png", dpi=300)
+plt.savefig(
+    os.path.join(FIGURE_DIR, "08_average_transaction_value.png"),
+    dpi=300,
+    bbox_inches="tight"
+)
+
 plt.show()
 plt.close()
 
 
-# ============================================================
-# 14. OUTLIER DETECTION
-# ============================================================
+# ------------------------------------------------------------
+# 16. OUTLIER DETECTION
+# ------------------------------------------------------------
 
 print("\n--- OUTLIER DETECTION ---")
 
@@ -326,9 +383,9 @@ for column in numeric_columns:
     print(f"{column}: {len(outliers)} outliers")
 
 
-# ============================================================
-# 15. INVESTIGATE TOTAL SALES OUTLIERS
-# ============================================================
+# ------------------------------------------------------------
+# 17. INVESTIGATE TOTAL SALES OUTLIERS
+# ------------------------------------------------------------
 
 Q1 = df["Total"].quantile(0.25)
 Q3 = df["Total"].quantile(0.75)
@@ -359,9 +416,9 @@ print(
 )
 
 
-# ============================================================
-# 16. SAVE CLEANED DATASET
-# ============================================================
+# ------------------------------------------------------------
+# 18. SAVE CLEANED DATASET
+# ------------------------------------------------------------
 
 df.to_csv(OUTPUT_FILE, index=False)
 
@@ -369,31 +426,41 @@ print("\n--- EXPORT ---")
 print(f"Cleaned dataset saved as: {OUTPUT_FILE}")
 
 
-# ============================================================
-# 17. FINAL SUMMARY
-# ============================================================
+# ------------------------------------------------------------
+# 19. FINAL PROJECT SUMMARY
+# ------------------------------------------------------------
+
+total_sales = df["Total"].sum()
+
+average_transaction = df["Total"].mean()
+
+best_product = sales_by_product.idxmax()
+
+best_branch = sales_by_branch.idxmax()
+
+most_used_payment = payment_counts.idxmax()
+
 
 print("\n" + "=" * 60)
 print("PROJECT COMPLETED SUCCESSFULLY")
 print("=" * 60)
 
 print(f"Final dataset size: {df.shape}")
-print(f"Total sales: {df['Total'].sum():.2f}")
-print(f"Average transaction value: {df['Total'].mean():.2f}")
+print(f"Total sales: {total_sales:.2f}")
+print(f"Average transaction value: {average_transaction:.2f}")
+print(f"Best performing product line: {best_product}")
+print(f"Best performing branch: {best_branch}")
+print(f"Most used payment method: {most_used_payment}")
 
-print(
-    f"Best performing product line: "
-    f"{sales_by_product.idxmax()}"
-)
-
-print(
-    f"Best performing branch: "
-    f"{sales_by_branch.idxmax()}"
-)
-
-print(
-    f"Most used payment method: "
-    f"{payment_counts.idxmax()}"
-)
+print("\nFiles created:")
+print(f"- {OUTPUT_FILE}")
+print("- figures/01_sales_by_product_line.png")
+print("- figures/02_sales_by_branch.png")
+print("- figures/03_sales_by_customer_type.png")
+print("- figures/04_sales_by_gender.png")
+print("- figures/05_daily_sales_trend.png")
+print("- figures/06_sales_distribution_boxplot.png")
+print("- figures/07_payment_method_usage.png")
+print("- figures/08_average_transaction_value.png")
 
 print("=" * 60)
