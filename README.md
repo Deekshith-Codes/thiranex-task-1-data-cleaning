@@ -148,8 +148,6 @@ The average transaction value across the dataset was approximately **322.97**.
 | Duplicate Rows | 0 |
 | Detected Outliers | 9 |
 
----
-
 ## Project Structure
 
 ```text
